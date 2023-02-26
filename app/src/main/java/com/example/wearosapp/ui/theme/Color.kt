@@ -1,4 +1,4 @@
-package com.example.wearosapp.presentation.ui.theme
+package com.example.wearosapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material.Colors

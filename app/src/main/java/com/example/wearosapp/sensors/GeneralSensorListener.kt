@@ -1,4 +1,4 @@
-package com.example.wearosapp.presentation.sensors
+package com.example.wearosapp.sensors
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
