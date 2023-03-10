@@ -7,4 +7,7 @@
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
     <string name="recording">Recording data from sensors…</string>
     <string name="connect">Connect To Phone</string>
+    <string name="record_gesture">Record gesture</string>
+    <string name="establish_connection">Establish connection</string>
+    <string name="choose_gesture">Please choose which gesture to record:</string>
 </resources>

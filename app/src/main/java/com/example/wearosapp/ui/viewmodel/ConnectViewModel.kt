@@ -9,7 +9,7 @@ import com.google.android.gms.wearable.Node
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-interface IMainViewModel {
+interface IConnectViewModel {
     val loading: LiveData<Boolean>
     val phoneName: LiveData<String>
     val visibleID: LiveData<Boolean>
@@ -18,7 +18,7 @@ interface IMainViewModel {
     fun sendTest()
 }
 
-class MainViewModel(private val capabilityClient: CapabilityClient, private val messageClient: MessageClient) : ViewModel(), IMainViewModel {
+class ConnectViewModel(private val capabilityClient: CapabilityClient, private val messageClient: MessageClient) : ViewModel(), IConnectViewModel {
 
     override val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
@@ -101,8 +101,8 @@ class MainViewModelFactory(private val capabilityClient: CapabilityClient, priva
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(capabilityClient, messageClient) as T
+        if (modelClass.isAssignableFrom(ConnectViewModel::class.java)) {
+            return ConnectViewModel(capabilityClient, messageClient) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

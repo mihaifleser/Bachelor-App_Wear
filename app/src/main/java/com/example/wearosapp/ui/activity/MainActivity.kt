@@ -7,34 +7,16 @@
 package com.example.wearosapp.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.lifecycle.ViewModelProvider
-import com.example.wearosapp.WearOsApplication
 import com.example.wearosapp.sensors.GeneralSensorListener
-import com.example.wearosapp.ui.screen.WearApp
-import com.example.wearosapp.ui.viewmodel.IMainViewModel
-import com.example.wearosapp.ui.viewmodel.MainViewModel
-import com.example.wearosapp.ui.viewmodel.MainViewModelFactory
-import com.google.android.gms.wearable.CapabilityClient
-import com.google.android.gms.wearable.MessageClient
-import javax.inject.Inject
+import com.example.wearosapp.ui.screen.MainScreen
 
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    internal lateinit var capabilityClient: CapabilityClient
-
-    @Inject
-    internal lateinit var messageClient: MessageClient
-
-    private val viewModel: IMainViewModel by lazy {
-        val factory = MainViewModelFactory(capabilityClient, messageClient)
-        ViewModelProvider(this, factory)[MainViewModel::class.java]
-    }
 
     private lateinit var sensorManager: SensorManager
     private val sensorListener = GeneralSensorListener()
@@ -45,12 +27,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        (application as WearOsApplication).applicationComponent.inject(this)
-
         super.onCreate(savedInstanceState)
 
         setContent {
-            WearApp(viewModel)
+            MainScreen(
+                navigateGesture = { startActivity(Intent(applicationContext, GestureActivity::class.java)) },
+                navigateConnect = { startActivity(Intent(applicationContext, ConnectActivity::class.java)) })
         }
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager

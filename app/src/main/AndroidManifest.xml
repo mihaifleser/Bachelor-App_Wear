@@ -39,6 +39,17 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".ui.activity.GestureActivity"
+            android:theme="@android:style/Theme.DeviceDefault">
+        </activity>
+
+        <activity
+            android:name=".ui.activity.ConnectActivity"
+            android:theme="@android:style/Theme.DeviceDefault">
+        </activity>
+
     </application>
 
 </manifest>

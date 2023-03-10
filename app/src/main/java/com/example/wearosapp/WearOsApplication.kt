@@ -12,14 +12,7 @@ class WearOsApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        createApplicationComponent()
+        applicationComponent = DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
     }
 
-    private fun createApplicationComponentBuilder(): DaggerApplicationComponent.Builder {
-        return DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this))
-    }
-
-    private fun createApplicationComponent() {
-        applicationComponent = createApplicationComponentBuilder().build()
-    }
 }
