@@ -7,9 +7,10 @@ import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
 import com.example.wearosapp.R
 import com.example.wearosapp.ui.theme.WearOsAppTheme
+import com.example.wearosapp.ui.viewmodel.IGestureViewModel
 
 @Composable
-fun GestureScreen() {
+fun GestureScreen(viewModel: IGestureViewModel) {
     WearOsAppTheme {
         ScalingLazyColumn {
             item {
