@@ -1,23 +1,31 @@
 package com.example.wearosapp.ui.viewmodel
 
 import android.hardware.SensorManager
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.*
 import com.example.wearosapp.database.Measurement
 import com.example.wearosapp.database.MeasurementDao
+import com.example.wearosapp.database.MeasurementType
 import kotlinx.coroutines.launch
 
 interface IGestureViewModel {
-
+    val gestures: MutableState<List<IGestureItemViewModel>>
 }
 
 class GestureViewModel(sensorManager: SensorManager, private val measurementDao: MeasurementDao) : SensorViewModel(sensorManager), IGestureViewModel {
 
+    override val gestures: MutableState<List<IGestureItemViewModel>> by lazy { mutableStateOf(emptyList()) }
+
+    private val onClick: (measurementType: MeasurementType) -> Unit = {
+        println(it.description)
+    }
+
     init {
         super.onInit()
-        println("Salut")
-        insertTest()
+        println("Gesture Screen")
+        gestures.value = (MeasurementType.values().map { GestureItemViewModel(it, onClick) })
+        //insertTest()
     }
 
     private fun insertTest() {

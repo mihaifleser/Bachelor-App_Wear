@@ -16,3 +16,8 @@ data class Measurement(
     val yAcceleration: Float,
     val zAcceleration: Float,
 )
+
+enum class MeasurementType(val description: String, val type: Int) {
+    UP_DOWN("Up and down", 1),
+    LEFT_RIGHT("Left and right", 2)
+}
