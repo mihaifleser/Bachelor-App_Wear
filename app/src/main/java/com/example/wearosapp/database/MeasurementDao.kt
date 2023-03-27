@@ -5,18 +5,18 @@ import androidx.room.*
 @Dao
 interface MeasurementDao {
     @Insert
-    fun insertAll(vararg measurements: Measurement)
+    suspend fun insertAll(vararg measurements: Measurement)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(measurement: Measurement)
 
     @Delete
-    fun delete(measurement: Measurement)
+    suspend fun delete(measurement: Measurement)
 
     @Query("SELECT * FROM measurement")
-    fun getAll(): List<Measurement>
+    suspend fun getAll(): List<Measurement>
 
-    @Query("SELECT * FROM measurement WHERE type = :type")
-    fun loadAllUsersOlderThan(type: Int): Array<Measurement>
+    @Query("SELECT COALESCE(MAX(batch), 0) AS max_batch FROM measurement;")
+    suspend fun getLatestBatch(): Int
 
 }
