@@ -5,10 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Measurement(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-
-    var type: Int = 0,
-    var batch: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long,
+    var batchId: Long = 0,
     val xRotation: Float,
     val yRotation: Float,
     val zRotation: Float,
@@ -16,10 +14,9 @@ data class Measurement(
     val yAcceleration: Float,
     val zAcceleration: Float,
 ) {
-    constructor(measurement: Measurement, type: Int, batch: Int) : this(
+    constructor(measurement: Measurement, batchId: Long) : this(
         measurement.id,
-        type,
-        batch,
+        batchId,
         measurement.xRotation,
         measurement.yRotation,
         measurement.zRotation,

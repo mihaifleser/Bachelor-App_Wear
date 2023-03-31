@@ -21,7 +21,7 @@ class GestureActivity : ComponentActivity() {
     lateinit var applicationDatabase: ApplicationDatabase
 
     private val viewModel: GestureViewModel by lazy {
-        val factory = GestureViewModelFactory(sensorManager, applicationDatabase.userDao())
+        val factory = GestureViewModelFactory(sensorManager, applicationDatabase.measurementDao(), applicationDatabase.batchDao())
         ViewModelProvider(this, factory)[GestureViewModel::class.java]
     }
 

@@ -45,7 +45,7 @@ open class SensorViewModel(private val sensorManager: SensorManager) : SensorEve
                 if (allMeasurements.size > SAMPLES) {
                     allMeasurements.removeAll(allMeasurements.subList(0, allMeasurements.size - SAMPLES).toList())
                 }
-                allMeasurements.add(Measurement(0, 0, 0, xRotation, yRotation, zRotation, xAcceleration, yAcceleration, zAcceleration))
+                allMeasurements.add(Measurement(0, 0, xRotation, yRotation, zRotation, xAcceleration, yAcceleration, zAcceleration))
             }
             Sensor.TYPE_ACCELEROMETER -> {
                 xAcceleration = p0.values?.get(0)!!
