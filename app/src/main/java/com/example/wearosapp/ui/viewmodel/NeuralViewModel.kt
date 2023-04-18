@@ -38,10 +38,9 @@ class NeuralViewModel(sensorManager: SensorManager, private val neuralModel: Int
                     input.putFloat(it.yAcceleration)
                     input.putFloat(it.zAcceleration)
                 }
-                val output = Array(1) { Array(100) { FloatArray(1) } }
+                val output = Array(1) { FloatArray(1) }
                 neuralModel.run(input, output)
-                for(i in 0 until 100)
-                    println("Result: " + output[0][i][0])
+                println("Result: " + output[0][0])
 
             }
         }
