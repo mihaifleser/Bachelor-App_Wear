@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.wearosapp.R
 import com.example.wearosapp.ui.screen.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -18,10 +19,14 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
+        val actions: List<Pair<Int, () -> Unit>> = listOf(
+            R.string.record_gesture to { startActivity(Intent(applicationContext, GestureActivity::class.java)) },
+            R.string.establish_connection to { startActivity(Intent(applicationContext, ConnectActivity::class.java)) },
+            R.string.test_neural to { startActivity(Intent(applicationContext, NeuralActivity::class.java)) }
+        )
+
         setContent {
-            MainScreen(
-                navigateGesture = { startActivity(Intent(applicationContext, GestureActivity::class.java)) },
-                navigateConnect = { startActivity(Intent(applicationContext, ConnectActivity::class.java)) })
+            MainScreen(actions)
         }
     }
 

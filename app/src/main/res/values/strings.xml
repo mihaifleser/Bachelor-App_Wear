@@ -11,4 +11,6 @@
     <string name="establish_connection">Establish connection</string>
     <string name="choose_gesture">Please choose which gesture to record:</string>
     <string name="choose_action">Please choose what you want to do:</string>
+    <string name="make_action">Please make an action.</string>
+    <string name="test_neural">Test neural model</string>
 </resources>

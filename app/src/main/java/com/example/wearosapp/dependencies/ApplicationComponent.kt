@@ -3,6 +3,7 @@ package com.example.wearosapp.dependencies
 import android.content.Context
 import com.example.wearosapp.ui.activity.ConnectActivity
 import com.example.wearosapp.ui.activity.GestureActivity
+import com.example.wearosapp.ui.activity.NeuralActivity
 import dagger.Component
 import javax.inject.Singleton
 
@@ -12,4 +13,5 @@ interface ApplicationComponent {
     val context: Context
     fun inject(mainActivity: ConnectActivity)
     fun inject(gestureActivity: GestureActivity)
+    fun inject(neuralActivity: NeuralActivity)
 }

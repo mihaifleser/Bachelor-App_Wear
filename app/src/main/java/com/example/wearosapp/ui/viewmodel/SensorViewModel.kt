@@ -42,16 +42,16 @@ open class SensorViewModel(private val sensorManager: SensorManager) : SensorEve
                 yRotation = p0.values?.get(1)!!
                 zRotation = p0.values?.get(2)!!
                 //println("Rotation: $xRotation $yRotation $zRotation")
-                if (allMeasurements.size > SAMPLES) {
-                    allMeasurements.removeAll(allMeasurements.subList(0, allMeasurements.size - SAMPLES).toList())
-                }
-                allMeasurements.add(Measurement(0, 0, xRotation, yRotation, zRotation, xAcceleration, yAcceleration, zAcceleration))
             }
             Sensor.TYPE_ACCELEROMETER -> {
                 xAcceleration = p0.values?.get(0)!!
                 yAcceleration = p0.values?.get(1)!!
                 zAcceleration = p0.values?.get(2)!!
                 //println("Acceleration: $xAcceleration $yAcceleration $zAcceleration")
+                if (allMeasurements.size > SAMPLES) {
+                    allMeasurements.removeAll(allMeasurements.subList(0, allMeasurements.size - SAMPLES).toList())
+                }
+                allMeasurements.add(Measurement(0, 0, xRotation, yRotation, zRotation, xAcceleration, yAcceleration, zAcceleration))
             }
         }
 

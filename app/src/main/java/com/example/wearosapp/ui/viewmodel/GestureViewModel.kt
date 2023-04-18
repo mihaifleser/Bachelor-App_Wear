@@ -77,6 +77,7 @@ class GestureViewModel(sensorManager: SensorManager, private val measurementDao:
                     )
                 )
                 if (localMeasurements.size == SAMPLES) {
+                    println("Samples reached!")
                     moving = false
                     println(localMeasurements)
                     screenState.value = ScreenState.LOADING
@@ -84,6 +85,7 @@ class GestureViewModel(sensorManager: SensorManager, private val measurementDao:
                         measurementDao.insertAll(*localMeasurements.toTypedArray())
                         localMeasurements.clear()
                         screenState.value = ScreenState.CHOOSE
+                        println("Values inserted!")
                     }
                 }
             }
