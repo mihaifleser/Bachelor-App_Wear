@@ -1,7 +1,5 @@
 package com.example.wearosapp.ui.viewmodel
 
-import android.hardware.Sensor
-import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -18,12 +16,6 @@ class GestureViewModel(sensorManager: SensorManager, private val measurementDao:
     SensorViewModel(sensorManager), IGestureViewModel {
 
     override val gestures: MutableState<List<IGestureItemViewModel>> by lazy { mutableStateOf(emptyList()) }
-
-    override val screenState: MutableState<ScreenState> by lazy { mutableStateOf(ScreenState.CHOOSE) }
-
-    private var localMeasurements: MutableList<Measurement> = emptyList<Measurement>().toMutableList()
-
-    private var moving = false
 
     private var currentBatch: Long? = null
 
@@ -51,50 +43,17 @@ class GestureViewModel(sensorManager: SensorManager, private val measurementDao:
         }
     }
 
-    override fun onSensorChanged(p0: SensorEvent?) {
-        super.onSensorChanged(p0)
-        if (p0?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-
-            if (screenState.value == ScreenState.START_RECORDING && isMoving()) {
-                println("IT is moving!")
-                moving = true
-                screenState.value = ScreenState.RECORDING_IN_PROGRESS
-                localMeasurements.addAll(allMeasurements.subList(allMeasurements.size - PREVIOUS_SAMPLES, allMeasurements.size)
-                    .map { Measurement(it, currentBatch!!) })
-            }
-
-            if (moving) {
-                localMeasurements.add(
-                    Measurement(
-                        0,
-                        currentBatch!!,
-                        xRotation,
-                        yRotation,
-                        zRotation,
-                        xAcceleration,
-                        yAcceleration,
-                        zAcceleration
-                    )
-                )
-                if (localMeasurements.size == SAMPLES) {
-                    println("Samples reached!")
-                    moving = false
-                    println(localMeasurements)
-                    screenState.value = ScreenState.LOADING
-                    viewModelScope.launch {
-                        measurementDao.insertAll(*localMeasurements.toTypedArray())
-                        localMeasurements.clear()
-                        screenState.value = ScreenState.CHOOSE
-                        println("Values inserted!")
-                    }
-                }
-            }
+    override fun onSamplesCollected() {
+        println("Samples reached!")
+        println(localMeasurements)
+        screenState.value = ScreenState.LOADING
+        viewModelScope.launch {
+            measurementDao.insertAll(*localMeasurements.map { Measurement(it, currentBatch!!) }.toTypedArray())
+            localMeasurements.clear()
+            screenState.value = ScreenState.IDLE
+            println("Values inserted!")
         }
     }
-}
-
-enum class ScreenState {
-    LOADING, CHOOSE, START_RECORDING, RECORDING_IN_PROGRESS
 }
 
 class GestureViewModelFactory(private val sensorManager: SensorManager, private val measurementDao: MeasurementDao, private val batchDao: BatchDao) :

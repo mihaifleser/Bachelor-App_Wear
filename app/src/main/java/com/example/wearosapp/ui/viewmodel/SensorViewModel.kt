@@ -4,11 +4,13 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.wearosapp.database.Measurement
 import kotlin.math.abs
 
-open class SensorViewModel(private val sensorManager: SensorManager) : SensorEventListener, ViewModel() {
+abstract class SensorViewModel(private val sensorManager: SensorManager) : SensorEventListener, ViewModel() {
 
     protected var xRotation: Float = 0f
     protected var yRotation: Float = 0f
@@ -19,6 +21,10 @@ open class SensorViewModel(private val sensorManager: SensorManager) : SensorEve
     protected var zAcceleration: Float = 0f
 
     protected var allMeasurements: MutableList<Measurement> = emptyList<Measurement>().toMutableList()
+
+    val screenState: MutableState<ScreenState> by lazy { mutableStateOf(ScreenState.IDLE) }
+
+    protected var localMeasurements: MutableList<Measurement> = emptyList<Measurement>().toMutableList()
 
     protected fun onInit() {
         val deviceSensors: List<Sensor> = sensorManager.getSensorList(Sensor.TYPE_ALL)
@@ -52,6 +58,29 @@ open class SensorViewModel(private val sensorManager: SensorManager) : SensorEve
                     allMeasurements.removeAll(allMeasurements.subList(0, allMeasurements.size - SAMPLES).toList())
                 }
                 allMeasurements.add(Measurement(0, 0, xRotation, yRotation, zRotation, xAcceleration, yAcceleration, zAcceleration))
+
+                if (screenState.value == ScreenState.START_RECORDING && isMoving()) {
+                    println("IT is moving!")
+                    screenState.value = ScreenState.RECORDING_IN_PROGRESS
+                    localMeasurements.addAll(allMeasurements.subList(allMeasurements.size - PREVIOUS_SAMPLES, allMeasurements.size))
+                }
+                if (screenState.value == ScreenState.RECORDING_IN_PROGRESS) {
+                    localMeasurements.add(
+                        Measurement(
+                            0,
+                            0,
+                            xRotation,
+                            yRotation,
+                            zRotation,
+                            xAcceleration,
+                            yAcceleration,
+                            zAcceleration
+                        )
+                    )
+                    if (localMeasurements.size == SAMPLES) {
+                        onSamplesCollected()
+                    }
+                }
             }
         }
 
@@ -61,9 +90,11 @@ open class SensorViewModel(private val sensorManager: SensorManager) : SensorEve
         println("Accuracy changed")
     }
 
-    protected fun isMoving(): Boolean {
+    private fun isMoving(): Boolean {
         return abs(xAcceleration) > LIMIT || abs(yAcceleration) > LIMIT || abs(zAcceleration - GRAVITY) > LIMIT
     }
+
+    abstract fun onSamplesCollected()
 
     companion object {
         const val GESTURE_DURATION_MCS = 1000000 // 1 second
@@ -72,4 +103,8 @@ open class SensorViewModel(private val sensorManager: SensorManager) : SensorEve
         const val GRAVITY = 9.8
         const val LIMIT = 3.2
     }
+}
+
+enum class ScreenState {
+    LOADING, IDLE, START_RECORDING, RECORDING_IN_PROGRESS
 }

@@ -23,7 +23,7 @@ fun GestureScreen(viewModel: IGestureViewModel) {
         ) {
             when (viewModel.screenState.value) {
                 ScreenState.LOADING -> CircularProgressIndicator(modifier = Modifier.padding(5.dp))
-                ScreenState.CHOOSE -> GestureList(viewModel = viewModel)
+                ScreenState.IDLE -> GestureList(viewModel = viewModel)
                 ScreenState.START_RECORDING -> Text(text = "Start moving")
                 ScreenState.RECORDING_IN_PROGRESS -> Text(text = "Recording in progress")
             }

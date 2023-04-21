@@ -8,6 +8,7 @@ package com.example.wearosapp.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.wearosapp.R
@@ -24,6 +25,8 @@ class MainActivity : ComponentActivity() {
             R.string.establish_connection to { startActivity(Intent(applicationContext, ConnectActivity::class.java)) },
             R.string.test_neural to { startActivity(Intent(applicationContext, NeuralActivity::class.java)) }
         )
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContent {
             MainScreen(actions)

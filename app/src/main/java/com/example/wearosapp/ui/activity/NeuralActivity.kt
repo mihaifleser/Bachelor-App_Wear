@@ -3,6 +3,7 @@ package com.example.wearosapp.ui.activity
 import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +33,7 @@ class NeuralActivity : ComponentActivity() {
 
         (application as WearOsApplication).applicationComponent.inject(this)
 
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         neuralModel = getNeuralModel(applicationContext)
 
         setContent {

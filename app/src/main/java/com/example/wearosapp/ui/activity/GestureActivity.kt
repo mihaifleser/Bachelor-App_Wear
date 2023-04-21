@@ -2,6 +2,7 @@ package com.example.wearosapp.ui.activity
 
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,8 @@ class GestureActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         (application as WearOsApplication).applicationComponent.inject(this)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContent {
             GestureScreen(viewModel)

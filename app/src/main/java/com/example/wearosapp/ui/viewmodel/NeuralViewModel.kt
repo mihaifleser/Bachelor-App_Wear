@@ -1,49 +1,54 @@
 package com.example.wearosapp.ui.viewmodel
 
-import android.hardware.Sensor
-import android.hardware.SensorEvent
 import android.hardware.SensorManager
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.wearosapp.database.MeasurementType
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.Interpreter
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 interface INeuralViewModel {
-
+    val toastMessage: SharedFlow<String>
+    val screenState: MutableState<ScreenState>
 }
 
 class NeuralViewModel(sensorManager: SensorManager, private val neuralModel: Interpreter) : SensorViewModel(sensorManager), INeuralViewModel {
 
-    private val input = ByteBuffer.allocateDirect(100 * 6 * 4).order(ByteOrder.nativeOrder())
+    override val toastMessage = MutableSharedFlow<String>()
 
-    private var first: Boolean = true
+    private val input = ByteBuffer.allocateDirect(100 * 6 * 4).order(ByteOrder.nativeOrder())
 
     init {
         super.onInit()
         println("Testing neural network")
+        screenState.value = ScreenState.START_RECORDING
     }
 
-    override fun onSensorChanged(p0: SensorEvent?) {
-        super.onSensorChanged(p0)
-        if (p0?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-            if (allMeasurements.size == SAMPLES && first) {
-                println("Hai te pup!")
-                first = false
-                allMeasurements.forEach {
-                    input.putFloat(it.xRotation)
-                    input.putFloat(it.yRotation)
-                    input.putFloat(it.zRotation)
-                    input.putFloat(it.xAcceleration)
-                    input.putFloat(it.yAcceleration)
-                    input.putFloat(it.zAcceleration)
-                }
-                val output = Array(1) { FloatArray(1) }
-                neuralModel.run(input, output)
-                println("Result: " + output[0][0])
-
-            }
+    override fun onSamplesCollected() {
+        screenState.value = ScreenState.LOADING
+        println("Hai te pup!")
+        localMeasurements.forEach {
+            input.putFloat(it.xRotation)
+            input.putFloat(it.yRotation)
+            input.putFloat(it.zRotation)
+            input.putFloat(it.xAcceleration)
+            input.putFloat(it.yAcceleration)
+            input.putFloat(it.zAcceleration)
         }
+        localMeasurements.clear()
+        val output = Array(1) { FloatArray(1) }
+        neuralModel.run(input, output)
+        println("Result: " + output[0][0])
+        val gesture = if (output[0][0] < 0.5) MeasurementType.UP_DOWN else MeasurementType.LEFT_RIGHT
+        viewModelScope.launch { toastMessage.emit(gesture.description) }
+        input.clear()
+        screenState.value = ScreenState.START_RECORDING
     }
 }
 
