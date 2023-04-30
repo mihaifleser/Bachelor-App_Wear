@@ -42,11 +42,11 @@ class NeuralViewModel(sensorManager: SensorManager, private val neuralModel: Int
             input.putFloat(it.zAcceleration)
         }
         localMeasurements.clear()
-        val output = Array(1) { FloatArray(1) }
+        val output = Array(1) { FloatArray(MeasurementType.values().size) }
         neuralModel.run(input, output)
-        println("Result: " + output[0][0])
-        val gesture = if (output[0][0] < 0.5) MeasurementType.UP_DOWN else MeasurementType.LEFT_RIGHT
-        viewModelScope.launch { toastMessage.emit(gesture.description) }
+        println("Result: " + output[0][0] + " " + output[0][1] + " " + output[0][2])
+        val gesture = MeasurementType.fromNeuralResult(output[0])
+        viewModelScope.launch { toastMessage.emit(gesture?.description ?: "Gesture not recognised") }
         input.clear()
         screenState.value = ScreenState.START_RECORDING
     }

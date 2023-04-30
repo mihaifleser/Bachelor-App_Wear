@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 
 interface IGestureViewModel {
     val gestures: MutableState<List<IGestureItemViewModel>>
+    val currentGesture: MutableState<String>
     val screenState: MutableState<ScreenState>
 }
 
@@ -16,6 +17,8 @@ class GestureViewModel(sensorManager: SensorManager, private val measurementDao:
     SensorViewModel(sensorManager), IGestureViewModel {
 
     override val gestures: MutableState<List<IGestureItemViewModel>> by lazy { mutableStateOf(emptyList()) }
+
+    override val currentGesture: MutableState<String> by lazy { mutableStateOf("") }
 
     private var currentBatch: Long? = null
 
@@ -25,6 +28,7 @@ class GestureViewModel(sensorManager: SensorManager, private val measurementDao:
         viewModelScope.launch {
             currentBatch = batchDao.insert(Batch(0, it.type))
             println("Current batch: $currentBatch")
+            currentGesture.value = it.description
             screenState.value = ScreenState.START_RECORDING
         }
     }
