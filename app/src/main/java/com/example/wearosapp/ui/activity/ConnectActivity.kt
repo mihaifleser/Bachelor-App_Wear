@@ -34,5 +34,9 @@ class ConnectActivity : ComponentActivity() {
         setContent {
             ConnectScreen(viewModel = viewModel)
         }
+
+        viewModel.node.observe(this) {
+            (application as WearOsApplication).node = it
+        }
     }
 }

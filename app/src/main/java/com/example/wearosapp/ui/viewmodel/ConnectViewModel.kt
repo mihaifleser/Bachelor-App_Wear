@@ -14,6 +14,7 @@ interface IConnectViewModel {
     val phoneName: LiveData<String>
     val visibleID: LiveData<Boolean>
     val searchButton: LiveData<Boolean>
+    val node: LiveData<Node>
     fun startSearching()
     fun sendTest()
 }
@@ -28,9 +29,12 @@ class ConnectViewModel(private val capabilityClient: CapabilityClient, private v
 
     override val searchButton: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
+    override val node: MutableLiveData<Node> by lazy { MutableLiveData<Node>() }
+
     private var processingNode: Node? = null
         set(value) {
             field = value
+            node.postValue(value)
             visibleID.postValue(true)
             if (value != null) {
                 phoneName.postValue(value.displayName)

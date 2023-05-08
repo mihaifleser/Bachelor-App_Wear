@@ -11,6 +11,7 @@ import com.example.wearosapp.WearOsApplication
 import com.example.wearosapp.ui.screen.NeuralScreen
 import com.example.wearosapp.ui.viewmodel.NeuralViewModel
 import com.example.wearosapp.ui.viewmodel.NeuralViewModelFactory
+import com.google.android.gms.wearable.MessageClient
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.channels.FileChannel
@@ -21,10 +22,13 @@ class NeuralActivity : ComponentActivity() {
     @Inject
     lateinit var sensorManager: SensorManager
 
+    @Inject
+    lateinit var messageClient: MessageClient
+
     lateinit var neuralModel: Interpreter
 
     private val viewModel: NeuralViewModel by lazy {
-        val factory = NeuralViewModelFactory(sensorManager, neuralModel)
+        val factory = NeuralViewModelFactory(sensorManager, neuralModel, messageClient, (application as WearOsApplication).node)
         ViewModelProvider(this, factory)[NeuralViewModel::class.java]
     }
 
