@@ -1,7 +1,11 @@
 package com.example.wearosapp.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -22,9 +26,8 @@ import com.example.wearosapp.ui.viewmodel.IConnectViewModel
 fun ConnectScreen(viewModel: IConnectViewModel) {
     WearOsAppTheme {
         val loading by viewModel.loading.observeAsState(false)
-        val searchButton by viewModel.searchButton.observeAsState(false)
         val phoneName by viewModel.phoneName.observeAsState("")
-        val visibleID by viewModel.visibleID.observeAsState(false)
+        val searchVisible by viewModel.searchVisible.observeAsState(false)
 
         Column(
             modifier = Modifier
@@ -33,16 +36,14 @@ fun ConnectScreen(viewModel: IConnectViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (searchButton) {
+            if (searchVisible) {
                 Button(
                     onClick = viewModel::startSearching,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(id = R.string.connect))
                 }
-            }
-
-            if (visibleID) {
+            } else {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
@@ -58,7 +59,6 @@ fun ConnectScreen(viewModel: IConnectViewModel) {
                     Text(text = "Send Test")
                 }
             }
-
             if (loading) {
                 CircularProgressIndicator(modifier = Modifier.padding(5.dp))
             }

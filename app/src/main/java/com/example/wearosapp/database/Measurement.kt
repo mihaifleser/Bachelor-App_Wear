@@ -40,7 +40,7 @@ enum class MeasurementType(val description: String, val type: Int) {
             return null
         }
 
-        private const val THRESHOLD = 0.5
+        private const val THRESHOLD = 0.85
     }
 
 }

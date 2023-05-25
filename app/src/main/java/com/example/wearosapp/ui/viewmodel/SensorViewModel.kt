@@ -101,7 +101,7 @@ abstract class SensorViewModel(private val sensorManager: SensorManager) : Senso
         const val PREVIOUS_SAMPLES = 15
         const val SAMPLES = 100
         const val GRAVITY = 9.8
-        const val LIMIT = 3.2
+        const val LIMIT = 3.7
     }
 }
 

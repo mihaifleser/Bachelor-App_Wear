@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 interface IConnectViewModel {
     val loading: LiveData<Boolean>
     val phoneName: LiveData<String>
-    val visibleID: LiveData<Boolean>
-    val searchButton: LiveData<Boolean>
+    val searchVisible: LiveData<Boolean>
     val node: LiveData<Node>
     fun startSearching()
     fun sendTest()
@@ -25,9 +24,7 @@ class ConnectViewModel(private val capabilityClient: CapabilityClient, private v
 
     override val phoneName: MutableLiveData<String> by lazy { MutableLiveData<String>() }
 
-    override val visibleID: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
-
-    override val searchButton: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
+    override val searchVisible: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
     override val node: MutableLiveData<Node> by lazy { MutableLiveData<Node>() }
 
@@ -35,18 +32,14 @@ class ConnectViewModel(private val capabilityClient: CapabilityClient, private v
         set(value) {
             field = value
             node.postValue(value)
-            visibleID.postValue(true)
+            searchVisible.postValue(value == null)
             if (value != null) {
                 phoneName.postValue(value.displayName)
-            }
-            if (value != null) {
-                searchButton.postValue(false)
             }
         }
 
     init {
-        visibleID.postValue(false)
-        searchButton.postValue(true)
+        searchVisible.postValue(true)
     }
 
     override fun startSearching() {
