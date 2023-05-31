@@ -62,7 +62,7 @@ abstract class SensorViewModel(private val sensorManager: SensorManager) : Senso
                 if (screenState.value == ScreenState.START_RECORDING && isMoving()) {
                     println("IT is moving!")
                     screenState.value = ScreenState.RECORDING_IN_PROGRESS
-                    localMeasurements.addAll(allMeasurements.subList(allMeasurements.size - PREVIOUS_SAMPLES, allMeasurements.size))
+                    localMeasurements.addAll(allMeasurements.takeIf { it.size >= PREVIOUS_SAMPLES }?.takeLast(PREVIOUS_SAMPLES) ?: allMeasurements)
                 }
                 if (screenState.value == ScreenState.RECORDING_IN_PROGRESS) {
                     localMeasurements.add(
