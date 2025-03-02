@@ -29,7 +29,8 @@ data class Measurement(
 enum class MeasurementType(val description: String, val type: Int) {
     UP_DOWN("Up and down", 0),
     LEFT_RIGHT("Left and right", 1),
-    ROTATE("Rotate wrist", 2);
+    ROTATE("Rotate wrist", 2),
+    OTHER("Other", 3);
 
     companion object {
         fun fromNeuralResult(result: FloatArray): MeasurementType? {

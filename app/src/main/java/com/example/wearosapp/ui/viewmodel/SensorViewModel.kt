@@ -49,6 +49,7 @@ abstract class SensorViewModel(private val sensorManager: SensorManager) : Senso
                 zRotation = p0.values?.get(2)!!
                 //println("Rotation: $xRotation $yRotation $zRotation")
             }
+
             Sensor.TYPE_ACCELEROMETER -> {
                 xAcceleration = p0.values?.get(0)!!
                 yAcceleration = p0.values?.get(1)!!
@@ -106,5 +107,5 @@ abstract class SensorViewModel(private val sensorManager: SensorManager) : Senso
 }
 
 enum class ScreenState {
-    LOADING, IDLE, START_RECORDING, RECORDING_IN_PROGRESS
+    DATA_COLLECTION, LOADING, IDLE, START_RECORDING, RECORDING_IN_PROGRESS
 }

@@ -47,7 +47,7 @@ class NeuralViewModel(sensorManager: SensorManager, private val neuralModel: Int
             input.putFloat(it.zAcceleration)
         }
         localMeasurements.clear()
-        val output = Array(1) { FloatArray(MeasurementType.values().size) }
+        val output = Array(1) { FloatArray(MeasurementType.values().size - 1) } //TODO Remove added number
         neuralModel.run(input, output)
         println("Result: " + output[0][0] + " " + output[0][1] + " " + output[0][2])
         val gesture = MeasurementType.fromNeuralResult(output[0])

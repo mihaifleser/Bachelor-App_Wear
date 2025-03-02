@@ -40,6 +40,7 @@ fun NeuralScreen(viewModel: NeuralViewModel) {
                 ScreenState.LOADING -> CircularProgressIndicator(modifier = Modifier.padding(5.dp))
                 ScreenState.RECORDING_IN_PROGRESS -> Text(text = "Recording in progress")
                 ScreenState.START_RECORDING -> Text(text = "Watch Idle, Start Moving")
+                ScreenState.DATA_COLLECTION -> Text(text = "Data Collection State")
             }
         }
     }

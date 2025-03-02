@@ -6,5 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class Batch(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    var type: Int = 0
+    var type: Int = 0,
+    var userName: String = "Default"
 )
